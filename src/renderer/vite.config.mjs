@@ -12,6 +12,13 @@ export default defineConfig({
   publicDir: "public",
   server: {
     port: 8080,
+    proxy: {
+      "/api": {
+        target: "https://wg.ha.chinamobile.com:20000",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
   },
   open: false,
   base: "/",
@@ -38,4 +45,5 @@ export default defineConfig({
       ],
     }),
   ],
+  
 });
