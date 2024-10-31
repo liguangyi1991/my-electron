@@ -26,7 +26,7 @@
   </div> -->
   <!-- <HelloWorld msg="Electron + Vue3 + Vite" /> -->
 
-  <!-- <a-collapse v-model:activeKey="activeKey" class="collapse">
+  <a-collapse v-model:activeKey="activeKey" class="collapse">
     <a-collapse-panel key="1" header="功能">
       <a-space>
         <a-button @click="onShowAppEnv"> 应用环境 </a-button>
@@ -98,7 +98,7 @@
         <a-button @click="getData"> 请求数据 </a-button>
       </a-space>
     </a-collapse-panel>
-  </a-collapse> -->
+  </a-collapse>
 
   <a-modal
     :open="showExitAppMsgbox"
