@@ -20,8 +20,8 @@ function initialize() {
         getAppVersion: () =>
           ipcRenderer.sendSync("electron-utils-get-app-version"),
         testName: () => ipcRenderer.invoke("electron-utils-test-name"),
-        getRequestData: (url: string, mobile: string) =>
-          ipcRenderer.invoke("electron-utils-get-request-data", url, mobile),
+        getRequestData: (form) =>
+          ipcRenderer.invoke("electron-utils-get-request-data", form),
         // === FALG LINE (DO NOT MODIFY/REMOVE) ===
       });
     } catch {

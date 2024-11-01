@@ -9,119 +9,27 @@
         <a-form-item label="手机号" name="mobile">
           <a-input v-model:value="formData.mobile" />
         </a-form-item>
+        <a-form-item label="输入文件">
+          <a-input
+            v-model:value="formData.inputFilePath"
+            placeholder="选择输入文件"
+            readonly
+          />
+          <a-button @click="selectInputFile">选择文件</a-button>
+        </a-form-item>
+
+        <a-form-item label="输出位置">
+          <a-input
+            v-model:value="formData.outputFilePath"
+            placeholder="选择输出位置"
+            readonly
+          />
+          <a-button @click="selectOutputFile">选择输出位置</a-button>
+        </a-form-item>
       </a-form>
     </div>
     <div class="result-view">{{ result }}</div>
   </div>
-  <!-- <div class="logo">
-    <a href="https://www.electronjs.org/" target="_blank">
-      <img src="/electron.svg" class="logo electron" alt="Electron logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo vite" alt="Vite logo" />
-    </a>
-  </div> -->
-  <!-- <HelloWorld msg="Electron + Vue3 + Vite" /> -->
-
-  <a-collapse v-model:activeKey="activeKey" class="collapse">
-    <a-collapse-panel key="1" header="功能">
-      <a-space>
-        <a-button @click="onShowAppEnv"> 应用环境 </a-button>
-        <a-button @click="onGetAppVersion"> 应用版本 </a-button>
-        <a-button @click="onShowOtherEnv"> 其他环境变量 </a-button>
-        <a-button @click="onOpenHomepage"> 打开主页 </a-button>
-        <a-button @click="onOpenDevTools"> 调试工具 </a-button>
-        <a-button @click="onShowFramelessWindow"> 无边框窗口 </a-button>
-        <a-button @click="onGetFileMd5"> 文件MD5 </a-button>
-      </a-space>
-    </a-collapse-panel>
-    <a-collapse-panel key="3" header="文件下载">
-      <a-form
-        :model="fdState"
-        :label-col="{ span: 3 }"
-        name="fileDownload"
-        autocomplete="off"
-        @finish="onStartDownloadFile"
-      >
-        <a-form-item
-          label="下载链接"
-          name="url"
-          :rules="[
-            { required: true, message: 'Please input file download url!' },
-          ]"
-        >
-          <a-input v-model:value="fdState.url" />
-        </a-form-item>
-        <a-form-item
-          label="保存路径"
-          name="savePath"
-          :rules="[{ required: true, message: 'Please input file save path!' }]"
-        >
-          <a-input v-model:value="fdState.savePath" />
-        </a-form-item>
-        <a-form-item label="文件MD5" name="md5">
-          <a-input v-model:value="fdState.md5" />
-        </a-form-item>
-        <a-form-item class="download-buttons">
-          <a-button
-            v-if="!fdState.downloading"
-            type="primary"
-            html-type="submit"
-          >
-            下载
-          </a-button>
-          <a-button
-            v-if="fdState.downloading"
-            type="primary"
-            @click="onCancelDownloadFile"
-          >
-            取消
-          </a-button>
-          <a-progress
-            style="margin-left: 20px"
-            type="circle"
-            :size="28"
-            :percent="fdState.percent"
-          />
-        </a-form-item>
-      </a-form>
-    </a-collapse-panel>
-    <a-collapse-panel key="4" header="网络请求">
-      <a-space>
-        <a-button @click="onHttpGetInMainProcess"> 主进程HTTP请求 </a-button>
-        <a-button @click="onHttpGetInRendererProcess">
-          渲染进程HTTP请求
-        </a-button>
-        <a-button @click="getData"> 请求数据 </a-button>
-      </a-space>
-    </a-collapse-panel>
-  </a-collapse>
-
-  <a-modal
-    :open="showExitAppMsgbox"
-    :confirm-loading="isExitingApp"
-    :cancel-button-props="{ disabled: isExitingApp }"
-    :closable="!isExitingApp"
-    ok-text="确定"
-    cancel-text="取消"
-    @ok="onExitApp"
-    @cancel="showExitAppMsgbox = false"
-  >
-    <div class="exit-msg-title">
-      <font-awesome-icon
-        icon="fa-solid fa-triangle-exclamation"
-        color="#ff0000"
-      />
-      警告
-    </div>
-    <p>
-      {{ isExitingApp ? "正在退出客户端......" : "您确定要退出客户端软件吗？" }}
-    </p>
-  </a-modal>
-
   <a-modal
     :open="showClosePrimaryWinMsgbox"
     title="警告"
@@ -159,13 +67,39 @@
   const isExitingApp = ref<boolean>(false);
   const formData = reactive({
     mobile: "13603999887",
+    inputFilePath: "",
+    outputFilePath: "",
   });
   const result = ref(null);
+
+  async function selectInputFile() {
+    const filePaths = await utils.showOpenDialog({
+      properties: ["openFile"],
+      filters: [{ name: "All Files", extensions: ["*"] }],
+    });
+    const filePathList = filePaths.filePaths;
+    if (filePathList && filePathList.length > 0) {
+      formData.inputFilePath = filePathList[0];
+      console.log("选择的文件路径", formData.inputFilePath);
+    }
+  }
+  async function selectOutputFile() {
+    const filePath = await utils.showOpenDialog({
+      properties: ["openDirectory"],
+    });
+    const filePathList = filePath.filePaths;
+    if (filePathList && filePathList.length > 0) {
+      formData.outputFilePath = filePathList[0];
+      console.log("选择的文件路径", formData.inputFilePath);
+    }
+  }
   async function getData() {
-    const resData = await utils.getRequestData(
-      "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
-      formData.mobile
-    );
+    const resData = await utils.getRequestData({
+      url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
+      mobile: formData.mobile,
+      inputFilePath: formData.inputFilePath,
+      outputFilePath: formData.outputFilePath,
+    });
     console.log("请求的结果-----------", resData);
     result.value = resData;
   }
