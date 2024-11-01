@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="top">
-      <a-button @click="getData"> 请求数据 </a-button>
+      <a-button @click="getData(1)"> 请求数据 </a-button>
+      <a-button @click="getData(2)"> 请求数据1 </a-button>
+
       <a-button @click="onOpenDevTools"> 调试工具 </a-button>
     </div>
     <div class="mid-view">
@@ -93,7 +95,7 @@
       console.log("选择的文件路径", formData.inputFilePath);
     }
   }
-  async function getData() {
+  async function getData(type) {
     const resData = await utils.getRequestData({
       url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
       mobile: formData.mobile,

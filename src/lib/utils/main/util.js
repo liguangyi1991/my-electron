@@ -1,6 +1,8 @@
 const xlsx = require('xlsx');
 import axiosInst from "../../axios-inst/main";
 import qs from "qs";
+const dayjs = require('dayjs');
+
 const path = require('path');
 // import { testData } from "./data.js"
 const testData = require("./data.js")
@@ -102,7 +104,7 @@ export async function processPhoneNumbers(inputFilePath, outputFilePath) {
 }
 
 function generateOutputFilePath(outputDir) {
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-'); // 使用时间戳，替换冒号和小数点
+  const timestamp = dayjs().format('YYYY-MM-DD-HH-mm-ss'); // 使用 dayjs 格式化时间戳
   const fileName = `解析结果_${timestamp}.xlsx`; // 拼接文件名
   return path.join(outputDir, fileName); // 将文件夹路径和文件名组合成完整路径
 }
