@@ -43,25 +43,6 @@ export async function fetchPhoneDetailsBatch(phoneNumbers) {
   }
   return results;
 }
-async function fetchPhoneDetails(phoneNumbers) {
-  const results = [];
-
-  for (const phone of phoneNumbers) {
-    try {
-
-    } catch (error) {
-      console.log(error);
-    }
-    try {
-
-    } catch (error) {
-      console.error(`Error fetching data for ${phone}: ${error}`);
-      results.push({ phone, error: error.message });
-    }
-  }
-
-  return results;
-}
 async function fetchPhoneDetail(phone) {
   try {
     const data = qs.stringify({
