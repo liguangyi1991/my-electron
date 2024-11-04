@@ -20,8 +20,13 @@ function initialize() {
         getAppVersion: () =>
           ipcRenderer.sendSync("electron-utils-get-app-version"),
         testName: () => ipcRenderer.invoke("electron-utils-test-name"),
-        getRequestData: (form) =>
-          ipcRenderer.invoke("electron-utils-get-request-data", form),
+        getRequestData: (form,callback) =>
+        {
+          const replyMessage =  ipcRenderer.invoke("electron-utils-get-request-data", form)
+          console.log('replyMessage', replyMessage);
+          callback(replyMessage)
+        }
+          ,
         onSendhandlestatu: (callback) => ipcRenderer.on("electron-utils-sendhandlestatu", (event) => {
           callback();
         }),

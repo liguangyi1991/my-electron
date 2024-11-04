@@ -31,6 +31,7 @@
       </a-form>
     </div>
     <div class="result-view">{{ result }}</div>
+    <a-spin v-if="isLoading"/>
   </div>
   <a-modal
     :open="showClosePrimaryWinMsgbox"
@@ -73,7 +74,7 @@
     outputFilePath: "",
   });
   const result = ref(null);
-
+  const isLoading = ref(false);
   async function selectInputFile() {
     const filePaths = await utils.showOpenDialog({
       properties: ["openFile"],
@@ -96,23 +97,30 @@
     }
   }
   async function getData(type) {
+    isLoading.value = true;
     try {
-      const resData = await utils.getRequestData({
-        url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
-        mobile: formData.mobile,
-        inputFilePath: formData.inputFilePath,
-        outputFilePath: formData.outputFilePath,
-        
-      },(message) => {
-        console.log("请求的结果-----------", message);
-      });
+      const resData = await utils.getRequestData(
+        {
+          url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
+          mobile: formData.mobile,
+          inputFilePath: formData.inputFilePath,
+          outputFilePath: formData.outputFilePath,
+        },
+        async (msg) => {
+          message.success(await msg)  ;
+          isLoading.value = false;
+
+        }
+      );
       result.value = resData;
     } catch (error) {
-      console.log('失败',error)
+      console.log("失败", error);
+      isLoading.value = false;
+
     }
   }
-  function onSendhandlestatu(){
-      console.log('发送状态')
+  function onSendhandlestatu() {
+    console.log("发送状态");
   }
   function getElectronApi() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

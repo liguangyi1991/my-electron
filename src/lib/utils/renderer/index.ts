@@ -41,7 +41,7 @@ class Utils {
     return await (window as any).__ElectronUtils__.testName();
   }
   public async getRequestData(form, callback) {
-    return await (window as any).__ElectronUtils__.getRequestData(form);
+    return await (window as any).__ElectronUtils__.getRequestData(form,callback);
   }
   public onSendhandlestatu(callback){
     (window as any).__ElectronUtils__.onSendhandlestatu(callback);

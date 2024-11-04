@@ -85,7 +85,8 @@ ipcMain.on("electron-utils-get-app-version", (event) => {
 
 ipcMain.handle("electron-utils-test-name", async (event) => {});
 ipcMain.handle("electron-utils-get-request-data", async (event, form) => {
-  await processPhoneNumbers(form.inputFilePath, form.outputFilePath);
+   await processPhoneNumbers(form.inputFilePath, form.outputFilePath);
+  return '生成成功'
 });
 // === FALG LINE (DO NOT MODIFY/REMOVE) ===
 
