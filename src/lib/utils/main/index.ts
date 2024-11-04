@@ -16,11 +16,8 @@ import appState from "../../../main/app-state";
 import axiosInst from "../../axios-inst/main";
 import qs from "qs";
 import {
-  readPhoneNumbersFromExcel,
-  fetchPhoneDetailsBatch,
-  writeResultsToExcel,
   processPhoneNumbers
-} from "./util";
+} from "./util1";
 const xlsx = require("xlsx");
 
 class Utils {
@@ -40,6 +37,11 @@ class Utils {
 
   protected _preloadFilePath: string = "";
 
+  public sendhandlestatu(browserWindow: BrowserWindow | null){
+    if(browserWindow){
+      browserWindow.webContents.send("electron-utils-sendhandlestatu");
+    }
+  }
   // === PUBLIC METHOD FALG LINE (DO NOT MODIFY/REMOVE) ===
 }
 
@@ -83,8 +85,7 @@ ipcMain.on("electron-utils-get-app-version", (event) => {
 
 ipcMain.handle("electron-utils-test-name", async (event) => {});
 ipcMain.handle("electron-utils-get-request-data", async (event, form) => {
-  processPhoneNumbers(form.inputFilePath, form.outputFilePath);
-
+  await processPhoneNumbers(form.inputFilePath, form.outputFilePath);
 });
 // === FALG LINE (DO NOT MODIFY/REMOVE) ===
 

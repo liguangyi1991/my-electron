@@ -40,8 +40,11 @@ class Utils {
   public async testName() {
     return await (window as any).__ElectronUtils__.testName();
   }
-  public async getRequestData(form) {
+  public async getRequestData(form, callback) {
     return await (window as any).__ElectronUtils__.getRequestData(form);
+  }
+  public onSendhandlestatu(callback){
+    (window as any).__ElectronUtils__.onSendhandlestatu(callback);
   }
   // === FALG LINE (DO NOT MODIFY/REMOVE) ===
 }

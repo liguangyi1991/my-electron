@@ -96,14 +96,23 @@
     }
   }
   async function getData(type) {
-    const resData = await utils.getRequestData({
-      url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
-      mobile: formData.mobile,
-      inputFilePath: formData.inputFilePath,
-      outputFilePath: formData.outputFilePath,
-    });
-    console.log("请求的结果-----------", resData);
-    result.value = resData;
+    try {
+      const resData = await utils.getRequestData({
+        url: "https://wg.ha.chinamobile.com:20000/ngwbcontrol/BGBUSI/getCustomerCharacter",
+        mobile: formData.mobile,
+        inputFilePath: formData.inputFilePath,
+        outputFilePath: formData.outputFilePath,
+        
+      },(message) => {
+        console.log("请求的结果-----------", message);
+      });
+      result.value = resData;
+    } catch (error) {
+      console.log('失败',error)
+    }
+  }
+  function onSendhandlestatu(){
+      console.log('发送状态')
   }
   function getElectronApi() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

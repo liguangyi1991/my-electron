@@ -22,6 +22,9 @@ function initialize() {
         testName: () => ipcRenderer.invoke("electron-utils-test-name"),
         getRequestData: (form) =>
           ipcRenderer.invoke("electron-utils-get-request-data", form),
+        onSendhandlestatu: (callback) => ipcRenderer.on("electron-utils-sendhandlestatu", (event) => {
+          callback();
+        }),
         // === FALG LINE (DO NOT MODIFY/REMOVE) ===
       });
     } catch {
